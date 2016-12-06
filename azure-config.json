@@ -1,0 +1,23 @@
+{
+	"subscriptionid" : "...guid...",
+	"certificate.linux" : "/home/cljung/mycert.pem",
+	"certificate.my" : "CURRENT_USER\\my\\cljungazuremgmt",
+	"certificate" : "C:\\Users\\cljung\\OneDrive - Microsoft\\Azure\\Certs\\mycert.pem",
+	"location" : "West Europe",
+	"storageaccount" : "cljungwevhd02",
+	"name" : "cljungpycs",
+	"deploymentslot" : "production",
+	"vmsize" : "Standard_D1_v2",
+	"imagename" : "b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04_5-LTS-amd64-server-20161130-en-us-30GB",
+	"userid" : "cljung",
+	"password" : "*",
+	"vnetname" : "cljungvnetwe6",
+	"subnet" : "infra6",
+	"vm" : [
+		{"vmname" : "cljungpyvm01",
+		 	"endpoints" : [
+				{"name" : "ssh", "protocol" : "tcp", "port" : "22022", "local_port" : "22"}
+			]
+		}
+	]
+}
