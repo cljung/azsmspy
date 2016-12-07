@@ -128,8 +128,7 @@ def DeleteDeployment():
          print('No Cloud Service')
          
 #-------------------------------------------------------------------------
-def GetDeployment():        
-    print('Get Deployment ' + cfg["name"])
+def GetDeployment():        3    print('Get Deployment ' + cfg["name"])
     try:
          result = sms.get_deployment_by_name(service_name=cfg["name"], deployment_name=cfg["name"])
          #print(vars(result))
