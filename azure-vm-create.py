@@ -82,47 +82,63 @@ def CreateDeployment():
                                               disable_ssh_password_authentication=False)
         linux_config.ssh = None
 
-        # provision VMs 
-        result = sms.create_virtual_machine_deployment(
-            service_name=cfg["name"],
-            deployment_name=cfg["name"],
-            deployment_slot=cfg["deploymentslot"],
-            label=vm["vmname"],
-            role_name=vm["vmname"],
-            system_config=linux_config,
-            os_virtual_hard_disk=os_hd,
-            role_size=cfg["vmsize"],
-            network_config=network_cfg,
-            virtual_network_name = cfg["vnetname"]
-            )
+        # provision VMs - different 1st vs 2..n
+        if count == 1:  
+           result = sms.create_virtual_machine_deployment(
+                service_name=cfg["name"],
+                deployment_name=cfg["name"],
+                deployment_slot=cfg["deploymentslot"],
+                label=vm["vmname"],
+                role_name=vm["vmname"],
+                system_config=linux_config,
+                os_virtual_hard_disk=os_hd,
+                role_size=cfg["vmsize"],
+                network_config=network_cfg,
+                virtual_network_name = cfg["vnetname"]
+                )
+        else:
+            result = sms.add_role(
+                service_name=cfg["name"],
+                deployment_name=cfg["name"],
+                role_name=vm["vmname"],
+                system_config=linux_config,
+                os_virtual_hard_disk=os_hd,
+                role_size=cfg["vmsize"],
+                network_config=network_cfg
+                )
         wait_for_async(result.request_id, 'Create VM ' + vm["vmname"], 600)
-        print('waiting for vm to start...')
-        wait_vm_to_start( cfg["name"], cfg["name"], 600 )
+
+    # wait for the 1st VM to start
+    print('waiting for vm to start...')
+    wait_vm_to_start( cfg["name"], cfg["name"], 600 )
 
 #-------------------------------------------------------------------------
 def DeleteDeployment():        
     print('Deleting ' + cfg["name"])
     try:
         result = sms.delete_deployment(cfg["name"], cfg["name"], delete_vhd=True)
-        wait_for_async(result.request_id, 'Delete Deployment' + cfg["name"], 600)
+        wait_for_async(result.request_id, 'Delete Deployment ' + cfg["name"], 600)
     except:
         print('No Deployment')
 
     try:
          result = sms.delete_hosted_service(cfg["name"], complete=True);
-         wait_for_async(result.request_id, 'Delete Cloud Service' + cfg["name"], 600)
+         wait_for_async(result.request_id, 'Delete Cloud Service ' + cfg["name"], 600)
     except:
          print('No Cloud Service')
          
 #-------------------------------------------------------------------------
 def GetDeployment():        
-    print('Get ' + cfg["name"])
-    result = sms.get_deployment_by_name(service_name=cfg["name"], deployment_name=cfg["name"])
-    #print(vars(result))
-    print(result.status)
-    print(result.virtual_ips[0].address)
-    print(result.role_instance_list[0].instance_status)
-    #print(vars(result.role_instance_list[0]))
+    print('Get Deployment ' + cfg["name"])
+    try:
+         result = sms.get_deployment_by_name(service_name=cfg["name"], deployment_name=cfg["name"])
+         #print(vars(result))
+         print(result.status)
+         print(result.virtual_ips[0].address)
+         print(result.role_instance_list[0].instance_status)
+         #print(vars(result.role_instance_list[0]))
+    except:
+         print('No Cloud Service')
          
 #-------------------------------------------------------------------------
 action = "get"

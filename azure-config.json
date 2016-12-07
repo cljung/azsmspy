@@ -16,6 +16,11 @@
 	"vm" : [
 		{"vmname" : "cljungpyvm01",
 		 	"endpoints" : [
+				{"name" : "ssh", "protocol" : "tcp", "port" : "22021", "local_port" : "22"}
+			]
+		},
+		{"vmname" : "cljungpyvm02",
+		 	"endpoints" : [
 				{"name" : "ssh", "protocol" : "tcp", "port" : "22022", "local_port" : "22"}
 			]
 		}
